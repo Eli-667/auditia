@@ -2045,6 +2045,12 @@ function applyTranslations() {
   if(emInput) emInput.placeholder = T.em_ph;
   const emCta = document.querySelector("button[onclick=\"submitEmail()\"]");
   if(emCta) emCta.textContent = T.em_cta;
+  // RGPD checkbox text
+  const gdprText = document.getElementById("gdpr-text");
+  if(gdprText) gdprText.textContent = T.em_gdpr;
+  const gdprLink = document.getElementById("gdpr-privacy-link");
+  if(gdprLink) gdprLink.textContent = T.privacy_link;
+
   // ChatGPT Shopping
   const shopBadge = document.querySelector(".shopping-badge-text");
   if(shopBadge) shopBadge.textContent = T.shopping_badge;
@@ -2145,7 +2151,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <p><strong>Tus derechos (RGPD):</strong><br>
       Puedes solicitar acceso, rectificación o eliminación de tus datos en cualquier momento escribiendo a egdatooptimizacion@gmail.com</p>
       <br>
-      <p style="color:#6B7280; font-size:12px;">Última actualización: mayo 2025</p>
+      <p style="color:#6B7280; font-size:12px;">Última actualización: mayo 2026</p>
     </div>
     <button onclick="document.getElementById('privacy-modal').style.display='none'; acceptCookies()" style="
       margin-top:20px; width:100%; background:#22C55E; color:#fff; border:none;
