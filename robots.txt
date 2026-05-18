@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eli-667.github.io/auditia/sitemap.xml
