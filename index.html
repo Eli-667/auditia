@@ -1508,8 +1508,13 @@ function submitEmail() {
   const errEl = document.getElementById('gdpr-error');
   if (errEl) errEl.remove();
 
-  // TODO: conectar con Mailchimp / ConvertKit / Brevo
-  console.log('Suscripción newsletter:', { email, url: storeUrl, sector: storeSector });
+  // Guardar lead en Google Sheets (E&G CRM)
+  fetch('https://script.google.com/macros/s/AKfycbxpMG6eQGNlHGyIi5bWrWlUT7TVprR3qx3hmh-AydgiCa7cSLxwHtf24zio_Dlltnhu/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, storeUrl, sector: storeSector, score: '', level: '' })
+  }).catch(() => {});
 
   emailCaptured = true;
 
