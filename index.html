@@ -1078,6 +1078,9 @@ let currentQ = 0;
 let answers = new Array(8).fill(null);
 let storeUrl = '';
 let storeSector = '';
+let emailCaptured = false;
+let pendingAction = null;   // 'quiz' | 'ai'
+let pendingAiUrl = '';
 
 // ═══════════════════════════════════════════════
 // NAVIGATION
@@ -1093,6 +1096,11 @@ function startQuiz() {
   storeSector = document.getElementById('store-sector').value;
   currentQ = 0;
   answers = new Array(8).fill(null);
+  if (!emailCaptured) {
+    pendingAction = 'quiz';
+    goTo('email');
+    return;
+  }
   renderQuestion();
   goTo('quiz');
 }
@@ -1173,7 +1181,7 @@ function nextQuestion() {
     renderQuestion();
     window.scrollTo(0, 0);
   } else {
-    goTo('email');
+    showResults();   // email ya capturado antes, ir directo a resultados
   }
 }
 
@@ -1478,7 +1486,19 @@ function submitEmail() {
 
   // TODO: conectar con Mailchimp / ConvertKit / Brevo
   console.log('Suscripción newsletter:', { email, url: storeUrl, sector: storeSector });
-  showResults();
+
+  emailCaptured = true;
+
+  if (pendingAction === 'quiz') {
+    pendingAction = null;
+    renderQuestion();
+    goTo('quiz');
+  } else if (pendingAction === 'ai') {
+    pendingAction = null;
+    executeAiAnalysis(pendingAiUrl);
+  } else {
+    showResults();
+  }
 }
 
 // skipEmail deshabilitado — el registro es obligatorio
@@ -1496,7 +1516,19 @@ function startAiAnalysis() {
     return;
   }
   if (!url.startsWith('http')) url = 'https://' + url;
+  storeUrl = url;
 
+  if (!emailCaptured) {
+    pendingAction = 'ai';
+    pendingAiUrl = url;
+    goTo('email');
+    return;
+  }
+
+  executeAiAnalysis(url);
+}
+
+function executeAiAnalysis(url) {
   // Resetear pantalla de análisis
   document.getElementById('analyzing-status').textContent = 'Conectando con el agente…';
   document.getElementById('analyzing-log').innerHTML = '';
